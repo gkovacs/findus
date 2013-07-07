@@ -106,6 +106,8 @@ setPositionCookies = () ->
     longitude = position.coords.longitude
     $.cookie('latitude', latitude)
     $.cookie('longitude', longitude)
+  , (error) ->
+    $('#errors').text('error while getting location: ' + error)
   )
 
 root.myLocation = new google.maps.LatLng(42.3590995, -71.0934608)

@@ -139,6 +139,8 @@
       longitude = position.coords.longitude;
       $.cookie('latitude', latitude);
       return $.cookie('longitude', longitude);
+    }, function(error) {
+      return $('#errors').text('error while getting location: ' + error);
     });
   };
 
