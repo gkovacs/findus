@@ -101,13 +101,13 @@ placeLines = (userPositions) ->
       #userToLine[currentUserId].setMap(googleMap)
       
 setPositionCookies = () ->
-  navigator.geolocation.getCurrentPosition((position) ->
+  geo_position_js.getCurrentPosition((position) ->
     latitude = position.coords.latitude
     longitude = position.coords.longitude
     $.cookie('latitude', latitude)
     $.cookie('longitude', longitude)
   , (error) ->
-    $('#errors').text('error while getting location: ' + error)
+    $('#errors').append('error while getting location: ' + error)
   )
 
 root.myLocation = new google.maps.LatLng(42.3590995, -71.0934608)
@@ -153,8 +153,8 @@ $(document).ready(() ->
   if not userid?
     userid = generateUserId()
     $.cookie('userid', userid)
-  if not navigator.geolocation?
-    $('#errors').text('You must have Geolocation (ie, GPS on your phone) to use this service.')
+  if not geo_position_js.init()
+    $('#errors').append('You must have Geolocation (ie, GPS on your phone) to use this service.')
   else
     setInterval(setPositionCookies, 20000)
     setInterval(updateCurrentPositions, 5000)

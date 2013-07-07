@@ -133,14 +133,14 @@
   };
 
   setPositionCookies = function() {
-    return navigator.geolocation.getCurrentPosition(function(position) {
+    return geo_position_js.getCurrentPosition(function(position) {
       var latitude, longitude;
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
       $.cookie('latitude', latitude);
       return $.cookie('longitude', longitude);
     }, function(error) {
-      return $('#errors').text('error while getting location: ' + error);
+      return $('#errors').append('error while getting location: ' + error);
     });
   };
 
@@ -192,8 +192,8 @@
       userid = generateUserId();
       $.cookie('userid', userid);
     }
-    if (!(navigator.geolocation != null)) {
-      return $('#errors').text('You must have Geolocation (ie, GPS on your phone) to use this service.');
+    if (!geo_position_js.init()) {
+      return $('#errors').append('You must have Geolocation (ie, GPS on your phone) to use this service.');
     } else {
       setInterval(setPositionCookies, 20000);
       setInterval(updateCurrentPositions, 5000);
