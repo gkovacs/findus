@@ -201,7 +201,8 @@
     if (!geo_position_js.init()) {
       return $('#errors').append('You must have Geolocation (ie, GPS on your phone) to use this service.');
     } else {
-      return setInterval(setPositionCookies, 10000);
+      setInterval(setPositionCookies, 5000);
+      return setPositionCookies();
     }
   });
 

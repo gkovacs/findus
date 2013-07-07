@@ -158,9 +158,9 @@ $(document).ready(() ->
   if not geo_position_js.init()
     $('#errors').append('You must have Geolocation (ie, GPS on your phone) to use this service.')
   else
-    setInterval(setPositionCookies, 10000)
+    setInterval(setPositionCookies, 5000)
     #setInterval(updateCurrentPositions, 5000)
-    #setPositionCookies()
+    setPositionCookies()
     #updateCurrentPositions()
 )
 
