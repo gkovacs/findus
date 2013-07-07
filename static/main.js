@@ -141,6 +141,10 @@
       return $.cookie('longitude', longitude);
     }, function(error) {
       return $('#errors').append('error while getting location: ' + error);
+    }, {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
     });
   };
 
