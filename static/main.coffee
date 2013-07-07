@@ -44,24 +44,30 @@ fitMapToPositions = (userPositions) ->
 getMarkerIconForUser = (currentUserId) ->
   return 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + currentUserId.toUpperCase()
 
+userToMarker = {}
+
 placeMarkers = (userPositions) ->
+  haveNewMarkers = false
   for currentUserId of userPositions
     latitude = userPositions[currentUserId].latitude
     longitude = userPositions[currentUserId].longitude
     latlng = new google.maps.LatLng(latitude, longitude)
-    markerParams = {
-      'position': latlng,
-    }
-    if currentUserId == userid
-      markerParams.title = 'This is your position'
-      markerParams.icon = 'youarehere.png'
-      $('#myGPSCoordinates').text('')
-      $('#myGPSCoordinates').html(positionToLink(latitude, longitude))
+    if not userToMarker[currentUserId]?
+      haveNewMarkers = true
+      markerParams = { 'position': latlng }
+      if currentUserId == userid
+        markerParams.title = 'This is your position'
+        markerParams.icon = 'youarehere.png'
+      else
+        markerParams.title = "This is your friend's position"
+        markerParams.icon = getMarkerIconForUser(currentUserId)
+      marker = new google.maps.Marker(markerParams)
+      marker.setMap(googleMap)
+      userToMarker[currentUserId] = marker
     else
-      markerParams.title = 'This is your friend position'
-      markerParams.icon = getMarkerIconForUser(currentUserId)
-    marker = new google.maps.Marker(markerParams)
-    marker.setMap(googleMap)
+      userToMarker[currentUserId].setPosition(latlng)
+  if haveNewMarkers
+    fitMapToPositions(userPositions)
 
 updateCurrentPositions = (position) ->
   initializeMap()
@@ -75,7 +81,7 @@ updateCurrentPositions = (position) ->
     ), (data) ->
       allUsers = JSON.parse(data)
       updatedPositions(allUsers)
-      fitMapToPositions(allUsers)
+      #fitMapToPositions(allUsers)
       placeMarkers(allUsers)
   )
 
@@ -104,7 +110,7 @@ $(document).ready(() ->
   else
     setInterval(() ->
       navigator.geolocation.getCurrentPosition(updateCurrentPositions)
-    , 3000)
+    , 5000)
     navigator.geolocation.getCurrentPosition(updateCurrentPositions)
 )
 
