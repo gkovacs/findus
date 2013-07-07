@@ -2,7 +2,7 @@ express = require 'express'
 app = express()
 http = require 'http'
 httpserver = http.createServer(app)
-httport = process.env.PORT ? 3333
+httport = process.env.PORT ? 5000
 httpserver.listen(httport, '0.0.0.0')
 webRoot = 'http://findus.herokuapp.com/'
 
