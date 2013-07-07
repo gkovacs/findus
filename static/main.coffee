@@ -106,9 +106,11 @@ setPositionCookies = () ->
     longitude = position.coords.longitude
     $.cookie('latitude', latitude)
     $.cookie('longitude', longitude)
+    updateCurrentPositions()
   , (error) ->
     $('#errors').append('error while getting location: ' + error)
-  , {enableHighAccuracy: true, timeout: 10000, maximumAge: 0})
+    updateCurrentPositions()
+  , {enableHighAccuracy: false, timeout: 5000, maximumAge: 10000})
 
 root.myLocation = new google.maps.LatLng(42.3590995, -71.0934608)
 
@@ -156,9 +158,9 @@ $(document).ready(() ->
   if not geo_position_js.init()
     $('#errors').append('You must have Geolocation (ie, GPS on your phone) to use this service.')
   else
-    setInterval(setPositionCookies, 20000)
-    setInterval(updateCurrentPositions, 5000)
-    setPositionCookies()
-    updateCurrentPositions()
+    setInterval(setPositionCookies, 10000)
+    #setInterval(updateCurrentPositions, 5000)
+    #setPositionCookies()
+    #updateCurrentPositions()
 )
 

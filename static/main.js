@@ -138,13 +138,15 @@
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
       $.cookie('latitude', latitude);
-      return $.cookie('longitude', longitude);
+      $.cookie('longitude', longitude);
+      return updateCurrentPositions();
     }, function(error) {
-      return $('#errors').append('error while getting location: ' + error);
+      $('#errors').append('error while getting location: ' + error);
+      return updateCurrentPositions();
     }, {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
+      enableHighAccuracy: false,
+      timeout: 5000,
+      maximumAge: 10000
     });
   };
 
@@ -199,10 +201,7 @@
     if (!geo_position_js.init()) {
       return $('#errors').append('You must have Geolocation (ie, GPS on your phone) to use this service.');
     } else {
-      setInterval(setPositionCookies, 20000);
-      setInterval(updateCurrentPositions, 5000);
-      setPositionCookies();
-      return updateCurrentPositions();
+      return setInterval(setPositionCookies, 10000);
     }
   });
 
