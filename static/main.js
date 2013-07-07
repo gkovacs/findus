@@ -152,7 +152,6 @@
       root.myLocation = new google.maps.LatLng(latitude, longitude);
       initializeMap();
     } else {
-      initializeMap();
       return;
     }
     return $.get('/sendInfo?' + $.param({
@@ -194,8 +193,8 @@
     if (!(navigator.geolocation != null)) {
       return $('#errors').text('You must have Geolocation (ie, GPS on your phone) to use this service.');
     } else {
-      setInterval(setPositionCookies, 5000);
-      setInterval(updateCurrentPositions, 3000);
+      setInterval(setPositionCookies, 20000);
+      setInterval(updateCurrentPositions, 5000);
       setPositionCookies();
       return updateCurrentPositions();
     }

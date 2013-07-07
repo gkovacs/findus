@@ -117,7 +117,6 @@ updateCurrentPositions = () ->
     root.myLocation = new google.maps.LatLng(latitude, longitude)
     initializeMap()
   else
-    initializeMap()
     return
   $.get('/sendInfo?' + $.param(
       'pageid': pageid,
@@ -155,8 +154,8 @@ $(document).ready(() ->
   if not navigator.geolocation?
     $('#errors').text('You must have Geolocation (ie, GPS on your phone) to use this service.')
   else
-    setInterval(setPositionCookies, 5000)
-    setInterval(updateCurrentPositions, 3000)
+    setInterval(setPositionCookies, 20000)
+    setInterval(updateCurrentPositions, 5000)
     setPositionCookies()
     updateCurrentPositions()
 )
