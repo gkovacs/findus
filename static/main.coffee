@@ -45,6 +45,7 @@ getMarkerIconForUser = (currentUserId) ->
   return 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + currentUserId.toUpperCase()
 
 userToMarker = {}
+userToLine = {}
 
 placeMarkers = (userPositions) ->
   haveNewMarkers = false
@@ -54,7 +55,7 @@ placeMarkers = (userPositions) ->
     latlng = new google.maps.LatLng(latitude, longitude)
     if not userToMarker[currentUserId]?
       haveNewMarkers = true
-      markerParams = { 'position': latlng }
+      markerParams = { 'position': latlng, 'optimized': false }
       if currentUserId == userid
         markerParams.title = 'This is your position'
         markerParams.icon = 'youarehere.png'
@@ -66,13 +67,58 @@ placeMarkers = (userPositions) ->
       userToMarker[currentUserId] = marker
     else
       userToMarker[currentUserId].setPosition(latlng)
-  if haveNewMarkers
-    fitMapToPositions(userPositions)
+      #userToMarker[currentUserId].setMap(googleMap)
+  #if haveNewMarkers
+  #  fitMapToPositions(userPositions)
 
-updateCurrentPositions = (position) ->
-  initializeMap()
-  latitude = position.coords.latitude
-  longitude = position.coords.longitude
+placeLines = (userPositions) ->
+  for currentUserId of userPositions
+    if userid == currentUserId
+      continue
+    latitude = userPositions[currentUserId].latitude
+    longitude = userPositions[currentUserId].longitude
+    latlng = new google.maps.LatLng(latitude, longitude)
+    lineCoordinates = [root.myLocation, latlng]
+    if not userToLine[currentUserId]?
+      lineSymbol = {
+        path: 'M 0,-1 0,1',
+        strokeOpacity: 1,
+        scale: 4
+      }
+      nline = new google.maps.Polyline({
+        path: lineCoordinates,
+        strokeOpacity: 0,
+        icons: [{
+          icon: lineSymbol,
+          offset: '0',
+          repeat: '20px'
+        }]
+      })
+      nline.setMap(googleMap)
+      userToLine[currentUserId] = nline
+    else
+      userToLine[currentUserId].setPath(lineCoordinates)
+      #userToLine[currentUserId].setMap(googleMap)
+      
+setPositionCookies = () ->
+  navigator.geolocation.getCurrentPosition((position) ->
+    latitude = position.coords.latitude
+    longitude = position.coords.longitude
+    $.cookie('latitude', latitude)
+    $.cookie('longitude', longitude)
+  )
+
+root.myLocation = new google.maps.LatLng(42.3590995, -71.0934608)
+
+updateCurrentPositions = () ->
+  root.latitude = latitude = $.cookie('latitude')
+  root.longitude = longitude = $.cookie('longitude')
+  if latitude? and longitude?
+    root.myLocation = new google.maps.LatLng(latitude, longitude)
+    initializeMap()
+  else
+    initializeMap()
+    return
   $.get('/sendInfo?' + $.param(
       'pageid': pageid,
       'userid': userid,
@@ -83,6 +129,7 @@ updateCurrentPositions = (position) ->
       updatedPositions(allUsers)
       #fitMapToPositions(allUsers)
       placeMarkers(allUsers)
+      placeLines(allUsers)
   )
 
 mapInitialized = false
@@ -93,8 +140,8 @@ initializeMap = () ->
     return
   mapInitialized = true
   mapOptions = {
-    center: new google.maps.LatLng(42.3590995, -71.0934608),
-    #zoom: 16,
+    center: root.myLocation,
+    zoom: 16,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   }
   googleMap = new google.maps.Map(document.getElementById("map_canvas"), mapOptions)
@@ -108,9 +155,9 @@ $(document).ready(() ->
   if not navigator.geolocation?
     $('#errors').text('You must have Geolocation (ie, GPS on your phone) to use this service.')
   else
-    setInterval(() ->
-      navigator.geolocation.getCurrentPosition(updateCurrentPositions)
-    , 5000)
-    navigator.geolocation.getCurrentPosition(updateCurrentPositions)
+    setInterval(setPositionCookies, 5000)
+    setInterval(updateCurrentPositions, 3000)
+    setPositionCookies()
+    updateCurrentPositions()
 )
 
