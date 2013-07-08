@@ -17,10 +17,10 @@ pageid = "<%= pageid %>"
 
 <div style="position:absolute; top: 0px; right: 0px; z-index: 10000; background-color: white; border-radius: 15px; border-color: grey; border-width: 3px; border-style: solid;">
 
-<span style="font-size: medium">Send your friends this link to share your location
-<a href="#" onclick="$('#detailedDescription').show(); $('#showDetailsButton').hide(); $('#hideDetailsButton').show()" id="showDetailsButton">(details)</a><br/>
-<a href="#" style="display: none" onclick="$('#detailedDescription').hide(); $('#hideDetailsButton').hide(); $('#showDetailsButton').show()" id="hideDetailsButton">(hide details)</a></span>
-<b><span style="font-size: large"><a href="<%= webpage %>"><%= webpage %></a></span></b>
+<span style="font-size: medium; text-align: center">Send your friends this link to share your location
+<a href="#" onclick="$('#detailedDescription').show(); $('#showDetailsButton').hide(); $('#hideDetailsButton').show()" id="showDetailsButton">(details)</a>
+<a href="#" style="display: none" onclick="$('#detailedDescription').hide(); $('#hideDetailsButton').hide(); $('#showDetailsButton').show()" id="hideDetailsButton">(hide details)</a></span><br/>
+<b><span style="font-size: large; text-align: center"><a href="<%= webpage %>"><%= webpage %></a></span></b>
 <!--<h2>(<a href="sms:555:<%= webpage %>">send link via SMS</a> or <a href="mailto:someone@example.com?subject=My%20Location&body=<%= webpageURIEncoded %>">email</a>) <a href="#" onclick="$('#detailedDescription').show(); $('#showDetailsButton').hide()" id="showDetailsButton">Details</a> </h2>-->
 <div id="detailedDescription" style="display: none">Are you trying to meet up with someone? If they visit the link above, it will show each of your locations on the map. Your locations will automatically update as you move around. Once done, close this page, and it will stop sharing your location.
 <br/>
