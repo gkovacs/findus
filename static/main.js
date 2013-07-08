@@ -143,6 +143,10 @@
 
   window.onresize = setMapFullscreen;
 
+  root.usingHighAccuracy = true;
+
+  root.currentTimeout = 5000;
+
   setPositionCookies = function() {
     return geo_position_js.getCurrentPosition(function(position) {
       var latitude, longitude;
@@ -152,12 +156,18 @@
       $.cookie('longitude', longitude);
       return updateCurrentPositions();
     }, function(error) {
-      $('#errors').append('error while getting location: ' + JSON.stringify(error));
+      if (error.code === 3 && root.usingHighAccuracy) {
+        root.usingHighAccuracy = false;
+      } else if (error.code === 3 && root.currentTimeout < 120000) {
+        root.currentTimeout += 10000;
+      } else {
+        $('#errors').append('error while getting location: ' + JSON.stringify(error));
+      }
       return updateCurrentPositions();
     }, {
-      enableHighAccuracy: false,
-      timeout: 10000,
-      maximumAge: 10000
+      enableHighAccuracy: root.usingHighAccuracy,
+      timeout: root.currentTimeout,
+      maximumAge: 20000
     });
   };
 
@@ -213,7 +223,7 @@
     if (!geo_position_js.init()) {
       return $('#errors').append('You must have Geolocation (ie, GPS on your phone) to use this service.');
     } else {
-      setInterval(setPositionCookies, 5000);
+      setInterval(setPositionCookies, 15000);
       return setPositionCookies();
     }
   });
