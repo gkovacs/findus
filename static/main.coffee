@@ -99,7 +99,16 @@ placeLines = (userPositions) ->
     else
       userToLine[currentUserId].setPath(lineCoordinates)
       #userToLine[currentUserId].setMap(googleMap)
-      
+
+setMapFullscreen = () ->
+  width = if window.innerWidth then window.innerWidth + 'px' else '100%'
+  height = if window.innerHeight then window.innerHeight + 'px' else '100%'
+  map_div = document.getElementById('map_canvas')
+  map_div.style.width = width
+  map_div.style.height = height
+
+window.onresize = setMapFullscreen
+
 setPositionCookies = () ->
   geo_position_js.getCurrentPosition((position) ->
     latitude = position.coords.latitude
@@ -110,7 +119,7 @@ setPositionCookies = () ->
   , (error) ->
     $('#errors').append('error while getting location: ' + JSON.stringify(error))
     updateCurrentPositions()
-  , {enableHighAccuracy: false, timeout: 5000, maximumAge: 10000})
+  , {enableHighAccuracy: false, timeout: 10000, maximumAge: 10000})
 
 root.myLocation = new google.maps.LatLng(42.3590995, -71.0934608)
 
@@ -120,6 +129,7 @@ updateCurrentPositions = () ->
   if latitude? and longitude?
     root.myLocation = new google.maps.LatLng(latitude, longitude)
     initializeMap()
+    setMapFullscreen()
   else
     return
   $.get('/sendInfo?' + $.param(
