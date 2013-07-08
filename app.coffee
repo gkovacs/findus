@@ -68,6 +68,23 @@ app.get '/sendInfo', (req, res) ->
     delete pageToUsers[pageid][currentUserId]
   res.send(JSON.stringify(pageToUsers[pageid]))
 
+app.get '/getInfo', (req, res) ->
+  pageid = req.query.pageid
+  if not pageid?
+    res.send(404)
+    return
+  if not pageToUsers[pageid]?
+    res.send('{}')
+    return
+  currentTime = Math.round(new Date().getTime()/1000.0) # unix time, seconds
+  usersToDelete = []
+  for currentUserId of pageToUsers[pageid]
+    if pageToUsers[pageid][currentUserId].updateTime + 50 < currentTime
+      usersToDelete.push currentUserId
+  for currentUserId in usersToDelete
+    delete pageToUsers[pageid][currentUserId]
+  res.send(JSON.stringify(pageToUsers[pageid]))
+
 app.get '/*', (req, res) ->
   pageid = req.params[0]
   if not isAlphanumericString(pageid)

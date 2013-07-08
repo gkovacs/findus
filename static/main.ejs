@@ -13,7 +13,10 @@ pageid = "<%= pageid %>"
 
 <div style="position:absolute; top: 0px; right: 0px; z-index: 10000; background-color: white; border-radius: 15px; border-color: grey; border-width: 3px; border-style: solid;">
 
-<h4>Send your friends this link to share your location <a href="#" onclick="$('#detailedDescription').show(); $('#showDetailsButton').hide()" id="showDetailsButton">(details)</a></h4>
+<h4>Send your friends this link to share your location
+<a href="#" onclick="$('#detailedDescription').show(); $('#showDetailsButton').hide(); $('#hideDetailsButton').show()" id="showDetailsButton">(details)</a>
+<a href="#" style="display: none" onclick="$('#detailedDescription').hide(); $('#hideDetailsButton').hide(); $('#showDetailsButton').show()" id="hideDetailsButton">(hide details)</a>
+</h4>
 <h2><a href="<%= webpage %>"><%= webpage %></a></h2>
 <!--<h2>(<a href="sms:555:<%= webpage %>">send link via SMS</a> or <a href="mailto:someone@example.com?subject=My%20Location&body=<%= webpageURIEncoded %>">email</a>) <a href="#" onclick="$('#detailedDescription').show(); $('#showDetailsButton').hide()" id="showDetailsButton">Details</a> </h2>-->
 <div id="detailedDescription" style="display: none">Are you trying to meet up with someone? If they visit the link above, it will show each of your locations on the map. Your locations will automatically update as you move around. Once done, close this page, and it will stop sharing your location.
@@ -21,8 +24,6 @@ pageid = "<%= pageid %>"
 This link is randomly generated whenever you visit <a href="<%= webRoot %>"><%= webRoot %></a>, and is known only by you and those you share it with. You are currently sharing your location with <span id="numOtherUsers">0</span> other users. Your location in GPS coordinates is <a id="myGPSCoordinates" href="#">(x,y)</a>, while your friends' coordinates are: <span id="friendGPSCoordinates"></span>. If you have additional questions, contact <a href="http://gkovacs.github.com">Geza Kovacs</a>.<br/>
 
 <div id="errors"></div>
-
-<a href="#" onclick="$('#detailedDescription').hide(); $('#showDetailsButton').show()">Hide Details</a>
 
 </div>
 

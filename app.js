@@ -95,6 +95,31 @@
     return res.send(JSON.stringify(pageToUsers[pageid]));
   });
 
+  app.get('/getInfo', function(req, res) {
+    var currentTime, currentUserId, pageid, usersToDelete, _i, _len;
+    pageid = req.query.pageid;
+    if (!(pageid != null)) {
+      res.send(404);
+      return;
+    }
+    if (!(pageToUsers[pageid] != null)) {
+      res.send('{}');
+      return;
+    }
+    currentTime = Math.round(new Date().getTime() / 1000.0);
+    usersToDelete = [];
+    for (currentUserId in pageToUsers[pageid]) {
+      if (pageToUsers[pageid][currentUserId].updateTime + 50 < currentTime) {
+        usersToDelete.push(currentUserId);
+      }
+    }
+    for (_i = 0, _len = usersToDelete.length; _i < _len; _i++) {
+      currentUserId = usersToDelete[_i];
+      delete pageToUsers[pageid][currentUserId];
+    }
+    return res.send(JSON.stringify(pageToUsers[pageid]));
+  });
+
   app.get('/*', function(req, res) {
     var pageid, webpageURIEncoded;
     pageid = req.params[0];

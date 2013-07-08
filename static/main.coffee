@@ -118,6 +118,7 @@ setPositionCookies = () ->
     $.cookie('latitude', latitude)
     $.cookie('longitude', longitude)
     updateCurrentPositions()
+    setTimeout(setPositionCookies, 1000)
   , (error) ->
     if error.code == 3 and root.usingHighAccuracy
       root.usingHighAccuracy = false
@@ -126,9 +127,29 @@ setPositionCookies = () ->
     else
       $('#errors').append('error while getting location: ' + JSON.stringify(error))
     updateCurrentPositions()
+    setTimeout(setPositionCookies, 1000)
   , {enableHighAccuracy: root.usingHighAccuracy, timeout: root.currentTimeout, maximumAge: 20000})
 
 root.myLocation = new google.maps.LatLng(42.3590995, -71.0934608)
+
+initializeMapAroundOtherUser = (userPositions) ->
+  for currentUserId of userPositions
+    latitude = userPositions[currentUserId].latitude
+    longitude = userPositions[currentUserId].longitude
+    root.myLocation = new google.maps.LatLng(latitude, longitude)
+    initializeMap()
+    setMapFullScreen()
+    return
+
+updateCurrentPositionsNoGPS = () ->
+  $.get('/getInfo?' + $.param({
+    'pageid', pageid
+  }), (data) ->
+    allUsers = JSON.parse(data)
+    initializeMapAroundOtherUser(allUsers)
+    updatedPositions(allUsers)
+    placeMarkers(allUsers)
+  )
 
 updateCurrentPositions = () ->
   root.latitude = latitude = $.cookie('latitude')
@@ -138,13 +159,14 @@ updateCurrentPositions = () ->
     initializeMap()
     setMapFullscreen()
   else
+    updateCurrentPositionsNoGPS()
     return
-  $.get('/sendInfo?' + $.param(
+  $.get('/sendInfo?' + $.param({
       'pageid': pageid,
       'userid': userid,
       'latitude': latitude,
       'longitude': longitude
-    ), (data) ->
+    }), (data) ->
       allUsers = JSON.parse(data)
       updatedPositions(allUsers)
       #fitMapToPositions(allUsers)
@@ -175,9 +197,9 @@ $(document).ready(() ->
   if not geo_position_js.init()
     $('#errors').append('You must have Geolocation (ie, GPS on your phone) to use this service.')
   else
-    setInterval(setPositionCookies, 15000)
-    #setInterval(updateCurrentPositions, 5000)
+    #setInterval(setPositionCookies, 15000)
+    updateCurrentPositions()
+    setInterval(updateCurrentPositions, 10000)
     setPositionCookies()
-    #updateCurrentPositions()
 )
 
