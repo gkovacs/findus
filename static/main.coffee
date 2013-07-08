@@ -108,7 +108,7 @@ setPositionCookies = () ->
     $.cookie('longitude', longitude)
     updateCurrentPositions()
   , (error) ->
-    $('#errors').append('error while getting location: ' + error)
+    $('#errors').append('error while getting location: ' + JSON.stringify(error))
     updateCurrentPositions()
   , {enableHighAccuracy: false, timeout: 5000, maximumAge: 10000})
 

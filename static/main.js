@@ -141,7 +141,7 @@
       $.cookie('longitude', longitude);
       return updateCurrentPositions();
     }, function(error) {
-      $('#errors').append('error while getting location: ' + error);
+      $('#errors').append('error while getting location: ' + JSON.stringify(error));
       return updateCurrentPositions();
     }, {
       enableHighAccuracy: false,
