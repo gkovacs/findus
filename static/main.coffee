@@ -203,3 +203,5 @@ $(document).ready(() ->
     setPositionCookies()
 )
 
+document.body.addEventListener('touchstart', (e) -> e.preventDefault())
+

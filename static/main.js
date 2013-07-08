@@ -257,4 +257,8 @@
     }
   });
 
+  document.body.addEventListener('touchstart', function(e) {
+    return e.preventDefault();
+  });
+
 }).call(this);
