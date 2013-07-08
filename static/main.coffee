@@ -109,7 +109,7 @@ setMapFullscreen = () ->
 
 window.onresize = setMapFullscreen
 root.usingHighAccuracy = true
-root.currentTimeout = 5000
+root.currentTimeout = 20000
 
 setPositionCookies = () ->
   geo_position_js.getCurrentPosition((position) ->
@@ -117,7 +117,7 @@ setPositionCookies = () ->
     longitude = position.coords.longitude
     $.cookie('latitude', latitude)
     $.cookie('longitude', longitude)
-    setTimeout(setPositionCookies, 2000)
+    setTimeout(setPositionCookies, 5000)
     setTimeout(updateCurrentPositions, 1000)
   , (error) ->
     if error.code == 3 and root.usingHighAccuracy
@@ -126,9 +126,9 @@ setPositionCookies = () ->
       root.currentTimeout += 10000
     else
       $('#errors').append('error while getting location: ' + JSON.stringify(error))
-    setTimeout(setPositionCookies, 2000)
+    setTimeout(setPositionCookies, 5000)
     setTimeout(updateCurrentPositions, 1000)
-  , {enableHighAccuracy: root.usingHighAccuracy, timeout: root.currentTimeout, maximumAge: 20000})
+  , {enableHighAccuracy: root.usingHighAccuracy, timeout: root.currentTimeout, maximumAge: 0})
 
 root.myLocation = new google.maps.LatLng(42.3590995, -71.0934608)
 

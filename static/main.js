@@ -145,7 +145,7 @@
 
   root.usingHighAccuracy = true;
 
-  root.currentTimeout = 5000;
+  root.currentTimeout = 20000;
 
   setPositionCookies = function() {
     return geo_position_js.getCurrentPosition(function(position) {
@@ -154,7 +154,7 @@
       longitude = position.coords.longitude;
       $.cookie('latitude', latitude);
       $.cookie('longitude', longitude);
-      setTimeout(setPositionCookies, 2000);
+      setTimeout(setPositionCookies, 5000);
       return setTimeout(updateCurrentPositions, 1000);
     }, function(error) {
       if (error.code === 3 && root.usingHighAccuracy) {
@@ -164,12 +164,12 @@
       } else {
         $('#errors').append('error while getting location: ' + JSON.stringify(error));
       }
-      setTimeout(setPositionCookies, 2000);
+      setTimeout(setPositionCookies, 5000);
       return setTimeout(updateCurrentPositions, 1000);
     }, {
       enableHighAccuracy: root.usingHighAccuracy,
       timeout: root.currentTimeout,
-      maximumAge: 20000
+      maximumAge: 0
     });
   };
 
