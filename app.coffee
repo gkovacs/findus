@@ -92,7 +92,7 @@ app.get '/*', (req, res) ->
   else
     console.log 'rendering'
     webpageURIEncoded = encodeURI(webRoot + pageid)
-    res.render('main.ejs', {'pageid': pageid, 'webRoot': webRoot, 'webpage': webRoot + pageid, 'webpageURIEncoded': webpageURIEncoded}, (err, html) ->
+    res.render('main.ejs', {'pageid': pageid, 'webRoot': webRoot, 'webpage': webRoot + pageid, 'webpageSansHTTP': webRoot[7..] + pageid, 'webpageURIEncoded': webpageURIEncoded}, (err, html) ->
       console.log 'done rendering'
       console.log err
       console.log html

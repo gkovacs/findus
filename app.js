@@ -132,6 +132,7 @@
         'pageid': pageid,
         'webRoot': webRoot,
         'webpage': webRoot + pageid,
+        'webpageSansHTTP': webRoot.slice(7) + pageid,
         'webpageURIEncoded': webpageURIEncoded
       }, function(err, html) {
         console.log('done rendering');
