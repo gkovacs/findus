@@ -117,8 +117,8 @@ setPositionCookies = () ->
     longitude = position.coords.longitude
     $.cookie('latitude', latitude)
     $.cookie('longitude', longitude)
-    updateCurrentPositions()
-    setTimeout(setPositionCookies, 5000)
+    setTimeout(setPositionCookies, 2000)
+    setTimeout(updateCurrentPositions, 1000)
   , (error) ->
     if error.code == 3 and root.usingHighAccuracy
       root.usingHighAccuracy = false
@@ -126,8 +126,8 @@ setPositionCookies = () ->
       root.currentTimeout += 10000
     else
       $('#errors').append('error while getting location: ' + JSON.stringify(error))
-    updateCurrentPositions()
-    setTimeout(setPositionCookies, 5000)
+    setTimeout(setPositionCookies, 2000)
+    setTimeout(updateCurrentPositions, 1000)
   , {enableHighAccuracy: root.usingHighAccuracy, timeout: root.currentTimeout, maximumAge: 20000})
 
 root.myLocation = new google.maps.LatLng(42.3590995, -71.0934608)

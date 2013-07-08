@@ -154,8 +154,8 @@
       longitude = position.coords.longitude;
       $.cookie('latitude', latitude);
       $.cookie('longitude', longitude);
-      updateCurrentPositions();
-      return setTimeout(setPositionCookies, 5000);
+      setTimeout(setPositionCookies, 2000);
+      return setTimeout(updateCurrentPositions, 1000);
     }, function(error) {
       if (error.code === 3 && root.usingHighAccuracy) {
         root.usingHighAccuracy = false;
@@ -164,8 +164,8 @@
       } else {
         $('#errors').append('error while getting location: ' + JSON.stringify(error));
       }
-      updateCurrentPositions();
-      return setTimeout(setPositionCookies, 5000);
+      setTimeout(setPositionCookies, 2000);
+      return setTimeout(updateCurrentPositions, 1000);
     }, {
       enableHighAccuracy: root.usingHighAccuracy,
       timeout: root.currentTimeout,
