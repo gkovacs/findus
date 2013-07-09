@@ -62,7 +62,7 @@ app.get '/sendInfo', (req, res) ->
   pageToUsers[pageid][userid].longitude = longitude
   usersToDelete = []
   for currentUserId of pageToUsers[pageid]
-    if pageToUsers[pageid][currentUserId].updateTime + 3600 < currentTime
+    if pageToUsers[pageid][currentUserId].updateTime + 86400 < currentTime
       usersToDelete.push currentUserId
   for currentUserId in usersToDelete
     delete pageToUsers[pageid][currentUserId]
@@ -79,7 +79,7 @@ app.get '/getInfo', (req, res) ->
   currentTime = Math.round(new Date().getTime()/1000.0) # unix time, seconds
   usersToDelete = []
   for currentUserId of pageToUsers[pageid]
-    if pageToUsers[pageid][currentUserId].updateTime + 50 < currentTime
+    if pageToUsers[pageid][currentUserId].updateTime + 86400 < currentTime
       usersToDelete.push currentUserId
   for currentUserId in usersToDelete
     delete pageToUsers[pageid][currentUserId]
