@@ -84,7 +84,7 @@
     pageToUsers[pageid][userid].longitude = longitude;
     usersToDelete = [];
     for (currentUserId in pageToUsers[pageid]) {
-      if (pageToUsers[pageid][currentUserId].updateTime + 50 < currentTime) {
+      if (pageToUsers[pageid][currentUserId].updateTime + 3600 < currentTime) {
         usersToDelete.push(currentUserId);
       }
     }
