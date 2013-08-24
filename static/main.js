@@ -243,6 +243,9 @@
   };
 
   $(document).ready(function() {
+    document.body.addEventListener('touchstart', function(e) {
+      return e.preventDefault();
+    });
     userid = $.cookie('userid');
     if (!(userid != null)) {
       userid = generateUserId();
@@ -255,10 +258,6 @@
       setInterval(updateCurrentPositions, 10000);
       return setPositionCookies();
     }
-  });
-
-  document.body.addEventListener('touchstart', function(e) {
-    return e.preventDefault();
   });
 
 }).call(this);

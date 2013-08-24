@@ -190,6 +190,7 @@ initializeMap = () ->
 
 
 $(document).ready(() ->
+  document.body.addEventListener('touchstart', (e) -> e.preventDefault())
   userid = $.cookie('userid')
   if not userid?
     userid = generateUserId()
@@ -203,5 +204,4 @@ $(document).ready(() ->
     setPositionCookies()
 )
 
-document.body.addEventListener('touchstart', (e) -> e.preventDefault())
 
